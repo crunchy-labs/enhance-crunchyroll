@@ -10,7 +10,7 @@ A multi-browser extension to enhance your [Crunchyroll](https://www.crunchyroll.
       <img src="https://img.shields.io/discord/994882878125121596?label=discord&style=flat-square" alt="Discord">
   </a>
   <a href="https://github.com/crunchy-labs/enhance-crunchyroll/actions/workflows/ci.yml">
-      <img src="https://img.shields.io/github/actions/workflow/status/enhance-crunchyroll/enhance-crunchyroll/ci.yml?branch=master&style=flat-square" alt="CI">
+      <img src="https://img.shields.io/github/actions/workflow/status/crunchy-labs/enhance-crunchyroll/ci.yml?branch=master&style=flat-square" alt="CI">
   </a>
 </p>
 
