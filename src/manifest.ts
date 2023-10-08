@@ -16,7 +16,7 @@ const sharedManifest: Partial<chrome.runtime.ManifestBase> = {
 		96: 'icons/enhance-crunchyroll@96px.png',
 		128: 'icons/enhance-crunchyroll@128px.png'
 	},
-	permissions: ['activeTab', 'downloads', 'storage', 'webRequest', 'webRequestBlocking']
+	permissions: ['downloads', 'storage', 'webRequest', 'webRequestBlocking']
 };
 
 const browserAction = {
