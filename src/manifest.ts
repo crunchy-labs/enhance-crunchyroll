@@ -16,7 +16,7 @@ const sharedManifest: Partial<chrome.runtime.ManifestBase> = {
 		96: 'icons/enhance-crunchyroll@96px.png',
 		128: 'icons/enhance-crunchyroll@128px.png'
 	},
-	permissions: ['downloads', 'storage', 'webRequest']
+	permissions: ['storage', 'webRequest']
 };
 
 const browserAction = {
@@ -53,7 +53,8 @@ const ManifestV3 = {
 };
 
 export function getManifest(
-	manifestVersion: number
+	manifestVersion: number,
+	chromium: boolean
 ): chrome.runtime.ManifestV2 | chrome.runtime.ManifestV3 {
 	const manifest = {
 		author: pkg.author,
@@ -61,6 +62,13 @@ export function getManifest(
 		name: pkg.displayName ?? pkg.name,
 		version: pkg.version
 	};
+
+	if (!chromium) {
+		ManifestV2.permissions.push('downloads');
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		ManifestV3.permissions.push('downloads');
+	}
 
 	if (manifestVersion === 2) {
 		return {

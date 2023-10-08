@@ -12,7 +12,10 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			svelte(),
 			webExtension({
-				manifest: getManifest(Number(env.MANIFEST_VERSION))
+				manifest: getManifest(
+					Number(env.MANIFEST_VERSION),
+					['true', 't', '1'].includes(env.CHROMIUM.toLowerCase())
+				)
 			})
 		],
 		resolve: {

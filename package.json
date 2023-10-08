@@ -12,7 +12,9 @@
 		"serve:chrome": "web-ext run -t chromium --start-url \"https://example.com\" --source-dir ./dist/",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"release:firefox": "MANIFEST_VERSION=2 CHROMIUM=false vite build --outDir release/firefox",
+		"release:chrome": "MANIFEST_VERSION=3 CHROMIUM=true vite build --outDir release/chrome"
 	},
 	"license": "MIT",
 	"devDependencies": {
