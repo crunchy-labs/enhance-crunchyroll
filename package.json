@@ -1,0 +1,43 @@
+{
+	"name": "enhance-crunchyroll",
+	"version": "0.1.0",
+	"displayName": "Enhance Crunchyroll",
+	"author": "Crunchy Labs Maintainers",
+	"description": "A multi-browser extension to enhance your Crunchyroll experience",
+	"scripts": {
+		"build": "vite build",
+		"watch": "vite build --watch --mode development --minify false",
+		"dev": "vite",
+		"serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\" --source-dir ./dist/",
+		"serve:chrome": "web-ext run -t chromium --start-url \"https://example.com\" --source-dir ./dist/",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@samrum/vite-plugin-web-extension": "^5.0.0",
+		"@sveltejs/vite-plugin-svelte": "^2.1.1",
+		"@tsconfig/svelte": "^4.0.1",
+		"@types/chrome": "^0.0.246",
+		"@types/webextension-polyfill": "^0.10.0",
+		"@typescript-eslint/eslint-plugin": "^6.7.3",
+		"@typescript-eslint/parser": "^6.7.3",
+		"eslint": "^8.50.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-svelte": "^2.33.2",
+		"m3u8-parser": "^7.1.0",
+		"prettier": "^3.0.3",
+		"prettier-plugin-svelte": "^3.0.3",
+		"sass": "^1.68.0",
+		"svelte": "^4.2.1",
+		"svelte-check": "^3.2.0",
+		"svelte-preprocess": "^5.0.3",
+		"tslib": "^2.5.0",
+		"typescript": "^5.0.4",
+		"vite": "^4.4.9",
+		"web-ext": "^7.6.2",
+		"webextension-polyfill": "^0.10.0"
+	},
+	"type": "module"
+}
