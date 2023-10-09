@@ -4,13 +4,16 @@ A multi-browser extension to enhance your [Crunchyroll](https://www.crunchyroll.
 
 <p align="center">
   <a href="https://github.com/crunchy-labs/enhance-crunchyroll/blob/master/LICENSE">
-      <img src="https://img.shields.io/github/license/crunchy-labs/enhance-crunchyroll?style=flat-square" alt="License">
+    <img src="https://img.shields.io/github/license/crunchy-labs/enhance-crunchyroll?style=flat-square" alt="License">
   </a>
   <a href="https://discord.gg/PXGPGpQxgk">
-      <img src="https://img.shields.io/discord/994882878125121596?label=discord&style=flat-square" alt="Discord">
+    <img src="https://img.shields.io/discord/994882878125121596?label=discord&style=flat-square" alt="Discord">
+  </a>
+  <a href="https://addons.mozilla.org/firefox/addon/enhance-crunchyroll/">
+    <img src="https://img.shields.io/amo/users/enhance-crunchyroll?style=flat-square&label=firefox%20users" alt="Firefox Users">
   </a>
   <a href="https://github.com/crunchy-labs/enhance-crunchyroll/actions/workflows/ci.yml">
-      <img src="https://img.shields.io/github/actions/workflow/status/crunchy-labs/enhance-crunchyroll/ci.yml?branch=master&style=flat-square" alt="CI">
+    <img src="https://img.shields.io/github/actions/workflow/status/crunchy-labs/enhance-crunchyroll/ci.yml?branch=master&style=flat-square" alt="CI">
   </a>
 </p>
 
@@ -29,20 +32,24 @@ A multi-browser extension to enhance your [Crunchyroll](https://www.crunchyroll.
 
 ## 📥 Installation
 
-### Firefox
+### 📦 Official browser stores
 
-- Download `enhance-crunchyroll-<version>-mv2.zip` from the [latest release](https://github.com/crunchy-labs/enhance-crunchyroll/releases/latest) and unzip it
-- Go into your browser and type `about:debugging#/runtime/this-firefox` in the address bar
-- Click the `Load Temporary Add-on...` button and choose the `manifest.json` file in the unzipped directory
+The best way to install the extension are the official browser extension stores:
 
-### Chromium / Google Chrome
+- [Firefox](https://addons.mozilla.org/firefox/addon/enhance-crunchyroll/)
 
-> As nearly every browser other than Firefox is based on Chromium, this should be the same for most of them
+### Manual installation
 
-- Download `enhance-crunchyroll-<version>-mv3.zip` from the [latest release](https://github.com/crunchy-labs/enhance-crunchyroll/releases/latest) and unzip it
-- Go into your browser and type `chrome://extensions` in the address bar
-- Turn on the developer mode by checking the switch in the top right corner
-- Click `Load unpacked` and choose the unzipped directory
+- Firefox
+  - Download `enhance-crunchyroll-<version>-mv2.zip` from the [latest release](https://github.com/crunchy-labs/enhance-crunchyroll/releases/latest) and unzip it
+  - Go into your browser and type `about:debugging#/runtime/this-firefox` in the address bar
+  - Click the `Load Temporary Add-on...` button and choose the `manifest.json` file in the unzipped directory
+- Chromium / Google Chrome
+  > As nearly every browser other than Firefox is based on Chromium, this should be the same for most of them
+  - Download `enhance-crunchyroll-<version>-mv3.zip` from the [latest release](https://github.com/crunchy-labs/enhance-crunchyroll/releases/latest) and unzip it
+  - Go into your browser and type `chrome://extensions` in the address bar
+  - Turn on the developer mode by checking the switch in the top right corner
+  - Click `Load unpacked` and choose the unzipped directory
 
 <details>
   <summary>What is the difference between mv2 and mv3?</summary>
