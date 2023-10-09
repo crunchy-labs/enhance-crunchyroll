@@ -13,9 +13,14 @@ const sharedManifest: Partial<chrome.runtime.ManifestBase> = {
 			all_frames: true,
 			run_at: 'document_start'
 		},
+		// actually there are multiple content scripts for different paths which could have been their own entry in this
+		// array. but because crunchyroll uses client site routing, content scripts are only triggered on the first
+		// page load. after that, if you navigate through the ui via links, no request is sent which could trigger the
+		// execution of content scripts. to circumvent this limitation, only one content script gets injected which then
+		// listens on location changes and calls the related code for this location
 		{
-			js: ['src/entries/contentScript/series/main.ts'],
-			matches: ['https://www.crunchyroll.com/series/*']
+			js: ['src/entries/contentScript/website/main.ts'],
+			matches: ['https://www.crunchyroll.com/*']
 		}
 	],
 	icons: {

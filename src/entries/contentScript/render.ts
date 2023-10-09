@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import { SvelteComponent } from 'svelte';
 
 export async function render(
 	cssPaths: string[],
@@ -30,4 +31,23 @@ export async function render(
 	render(appRoot);
 
 	return appContainer;
+}
+
+export class MountComponent {
+	static elems: Map<string, HTMLElement> = new Map();
+
+	static mount(component: typeof SvelteComponent, cssPaths: string[], target: HTMLElement) {
+		render(cssPaths, target, (app) => {
+			new component({
+				target: app
+			});
+		}).then((e) => this.elems.set(component.name, e));
+	}
+
+	static unmount(component: typeof SvelteComponent) {
+		const elem = this.elems.get(component.name);
+		if (!elem) return;
+		elem.remove();
+		this.elems.delete(component.name);
+	}
 }
