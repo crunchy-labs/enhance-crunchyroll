@@ -43,8 +43,10 @@ const browserAction = {
 
 const websitePermissions = [
 	'*://*.crunchyroll.com/*',
-	'*://*.gccrunchyroll.com/*',
-	'*://*.crunchyrollsvc.com/*'
+	'*://*.crunchyrollsvc.com/*', // some api endpoints
+	'*://*.gccrunchyroll.com/*', // cdn for some hls streams
+	'*://*.vrv.co/*', // cdn for some hls streams
+	'*://*.akamaized.net/*' // cdn for some hls streams
 ];
 
 const ManifestV2 = {
