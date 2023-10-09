@@ -16,7 +16,8 @@ export async function setSetting<T>(setting: Setting<T>, value: T) {
 
 export function subscribeSetting<T>(
 	setting: Setting<T>,
-	callback: (newValue: T, oldValue: T) => void
+	callback: (newValue: T, oldValue: T) => void,
+	initialRead?: boolean
 ): () => void {
 	const subscribeCallback = (changes: { [key: string]: browser.Storage.StorageChange }) => {
 		const subscribed = changes[setting.key];
@@ -26,6 +27,13 @@ export function subscribeSetting<T>(
 	};
 
 	browser.storage.local.onChanged.addListener(subscribeCallback);
+
+	if (initialRead === true) {
+		browser.storage.local.get(setting.key).then((v) => {
+			const value = v[setting.key] === undefined ? setting.default : v[setting.key];
+			callback(value, value);
+		});
+	}
 
 	return () => browser.storage.local.onChanged.removeListener(subscribeCallback);
 }
@@ -59,6 +67,10 @@ export function subscribeSettings(
 }
 
 export const PlayerSettings = {
+	DoubleClickMaximize: {
+		key: 'doubleClickMaximize',
+		default: true
+	} satisfies Setting<boolean>,
 	NoStreamLimit: {
 		key: 'noStreamLimit',
 		default: true

@@ -2,6 +2,7 @@ import { getElementMounted } from '~/entries/contentScript/player/utils';
 import { MountComponent } from '~/entries/contentScript/render';
 import DownloadButton from '~/entries/contentScript/player/elements/DownloadButton.svelte';
 import { settings } from '~/entries/contentScript/player/settings';
+import { PlayerSettings, subscribeSetting } from '~/lib/settings';
 
 export let id = '';
 
@@ -40,6 +41,22 @@ async function onMessage(message: MessageEvent) {
 
 async function main() {
 	window.addEventListener('message', onMessage);
+
+	const doubleClickHandler = () => {
+		const maximizeButton = document.querySelector('#settingsControl')
+			.nextElementSibling as HTMLButtonElement;
+		maximizeButton.click();
+	};
+
+	subscribeSetting(
+		PlayerSettings.DoubleClickMaximize,
+		(value) => {
+			value
+				? window.addEventListener('dblclick', doubleClickHandler)
+				: window.removeEventListener('dblclick', doubleClickHandler);
+		},
+		true
+	);
 }
 
 main();

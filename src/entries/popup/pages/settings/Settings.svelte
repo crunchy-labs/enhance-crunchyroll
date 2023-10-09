@@ -30,6 +30,12 @@
 				open: true,
 				entries: [
 					{
+						name: 'Double click to maximize',
+						details: 'Shows the video player in fullscreen when double clicking it',
+						setting: PlayerSettings.DoubleClickMaximize,
+						value: await settingStoreProxy(PlayerSettings.DoubleClickMaximize)
+					},
+					{
 						name: 'Disable stream limit',
 						details: 'Disable the max. parallel stream limit',
 						setting: PlayerSettings.NoStreamLimit,
