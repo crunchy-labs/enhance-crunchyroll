@@ -12,6 +12,10 @@ const sharedManifest: Partial<chrome.runtime.ManifestBase> = {
 			matches: ['https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
 			all_frames: true,
 			run_at: 'document_start'
+		},
+		{
+			js: ['src/entries/contentScript/series/main.ts'],
+			matches: ['https://www.crunchyroll.com/series/*']
 		}
 	],
 	icons: {

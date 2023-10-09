@@ -5,7 +5,8 @@
 		DebugSettings,
 		getSetting,
 		setSetting,
-		PlayerSettings
+		PlayerSettings,
+		SeriesSettings
 	} from '~/lib/settings';
 	import type { Writable } from 'svelte/store';
 	import { get, writable } from 'svelte/store';
@@ -13,7 +14,10 @@
 	async function settingStoreProxy<T>(setting: Setting<T>): Promise<Writable<T>> {
 		const store = writable<T>(await getSetting(setting));
 
-		store.subscribe(async (value) => await setSetting(setting, value));
+		let firstRun = true;
+		store.subscribe(async (value) =>
+			firstRun ? (firstRun = false) : await setSetting(setting, value)
+		);
 
 		return store;
 	}
@@ -36,6 +40,18 @@
 						details: 'Show the default context menu instead of the custom one when right clicking',
 						setting: PlayerSettings.DefaultContextMenu,
 						value: await settingStoreProxy(PlayerSettings.DefaultContextMenu)
+					}
+				]
+			},
+			{
+				name: 'Series',
+				open: true,
+				entries: [
+					{
+						name: 'Show next episode airing date',
+						details: 'Show the date when the next episode of a series airs',
+						setting: SeriesSettings.NextEpisodeAirDate,
+						value: await settingStoreProxy(SeriesSettings.NextEpisodeAirDate)
 					}
 				]
 			},

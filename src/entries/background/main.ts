@@ -1,63 +1,75 @@
 import { getSetting, PlayerSettings } from '~/lib/settings';
 import type { Downloads } from 'webextension-polyfill';
 import browser from 'webextension-polyfill';
-import { HlsDownload, type MessageRequest, parseMessage } from '~/lib/messages';
+import { HlsDownload, JsonRequest, type MessageRequest, parseMessage } from '~/lib/messages';
 import { downloadHls } from '~/entries/background/download';
 import { waitForCallback } from '~/lib/utils';
 
-browser.runtime.onMessage.addListener(async (message) => {
-	const parsed = parseMessage(message);
-	if (parsed == null) return;
+browser.runtime.onConnect.addListener((port) => {
+	port.onMessage.addListener((message) => {
+		const parsed = parseMessage(message);
 
-	switch (parsed.id) {
-		case HlsDownload.id: {
-			const content = (parsed as MessageRequest<typeof HlsDownload>).content;
+		(async () => {
+			if (parsed == null) return;
 
-			if ('showSaveFilePicker' in window) {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				const file: FileSystemFileHandle = await window.showSaveFilePicker({
-					suggestedName: content.filename,
-					types: [{ description: 'test', accept: { 'video/mp2t': ['.ts'] } }]
-				});
+			switch (parsed.id) {
+				case HlsDownload.id: {
+					const content = (parsed as MessageRequest<typeof HlsDownload>).content;
 
-				const writer = (await file.createWritable()).getWriter();
+					if ('showSaveFilePicker' in window) {
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
+						const file: FileSystemFileHandle = await window.showSaveFilePicker({
+							suggestedName: content.filename,
+							types: [{ description: 'test', accept: { 'video/mp2t': ['.ts'] } }]
+						});
 
-				const success = await downloadHls(content, async (data) => {
-					await writer.write(data);
-				});
-				if (!success) return false;
+						const writer = (await file.createWritable()).getWriter();
 
-				await writer.close();
-			} else {
-				const buf = [];
+						const success = await downloadHls(content, async (data) => {
+							await writer.write(data);
+						});
+						if (!success) return false;
 
-				const success = await downloadHls(content, async (data) => {
-					buf.push(data);
-				});
-				if (!success) return false;
+						await writer.close();
+					} else {
+						const buf = [];
 
-				const objectUrl = URL.createObjectURL(new Blob(buf));
-				const downloadId = await browser.downloads.download({
-					url: objectUrl,
-					filename: content.filename
-				});
+						const success = await downloadHls(content, async (data) => {
+							buf.push(data);
+						});
+						if (!success) return false;
 
-				await waitForCallback(
-					(delta: Downloads.OnChangedDownloadDeltaType) => {
-						if (delta.id == downloadId && delta.state?.current === 'complete') {
-							URL.revokeObjectURL(objectUrl);
-							return true;
-						}
-					},
-					browser.downloads.onChanged.addListener,
-					browser.downloads.onChanged.removeListener
-				);
+						const objectUrl = URL.createObjectURL(new Blob(buf));
+						const downloadId = await browser.downloads.download({
+							url: objectUrl,
+							filename: content.filename
+						});
+
+						await waitForCallback(
+							(delta: Downloads.OnChangedDownloadDeltaType) => {
+								if (delta.id == downloadId && delta.state?.current === 'complete') {
+									URL.revokeObjectURL(objectUrl);
+									return true;
+								}
+							},
+							browser.downloads.onChanged.addListener,
+							browser.downloads.onChanged.removeListener
+						);
+					}
+
+					return true;
+				}
+				case JsonRequest.id: {
+					const { url, init } = (parsed as MessageRequest<typeof JsonRequest>).content;
+
+					const response = await fetch(url, init);
+
+					return await response.json();
+				}
 			}
-
-			return true;
-		}
-	}
+		})().then((r) => port.postMessage({ id: parsed.id, content: r }));
+	});
 });
 
 const drmManifestUrlPattern =

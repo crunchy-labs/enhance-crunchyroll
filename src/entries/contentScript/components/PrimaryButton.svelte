@@ -14,7 +14,11 @@
 		color: #141519;
 		border: none;
 
-		font-family: Lato, Helvetica Neue, helvetica, sans-serif;
+		font-family:
+			Lato,
+			Helvetica Neue,
+			helvetica,
+			sans-serif;
 		font-weight: 900;
 		font-size: 0.875rem;
 		line-height: 1.125rem;

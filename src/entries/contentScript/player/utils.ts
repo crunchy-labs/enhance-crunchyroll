@@ -3,22 +3,26 @@ export async function getElementMounted<T extends Element, P extends HTMLElement
 	parent: P,
 	deep = false
 ): Promise<T> {
-	let element = watchFn(parent);
-	if (element != null) return element;
-
 	let elementPromiseResolve: (value: T) => void;
 	const elementPromise = new Promise<T>((r) => (elementPromiseResolve = r));
 
-	new MutationObserver((_, observer) => {
-		element = watchFn(parent);
+	const observer = new MutationObserver(() => {
+		const element = watchFn(parent);
 		if (element != null) {
 			observer.disconnect();
 			elementPromiseResolve(element);
 		}
-	}).observe(parent, {
+	});
+	observer.observe(parent, {
 		childList: true,
 		subtree: deep
 	});
+
+	const element = watchFn(parent);
+	if (element != null) {
+		observer.disconnect();
+		return element;
+	}
 
 	return await elementPromise;
 }

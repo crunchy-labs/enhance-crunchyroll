@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { ActiveDownload as ActiveDownloadMsg, sendMessage, parseMessage } from '~/lib/messages';
+import { ActiveDownload as ActiveDownloadMsg, parseMessage } from '~/lib/messages';
 
 export interface ActiveDownload {
 	id: string;
@@ -12,7 +12,8 @@ export interface ActiveDownload {
 
 export async function sendActiveDownload(download: ActiveDownload): Promise<boolean> {
 	try {
-		return (await sendMessage(ActiveDownloadMsg, download)) !== false;
+		const response = await browser.runtime.sendMessage({ ...ActiveDownloadMsg, content: download });
+		return response !== false;
 	} catch (_) {
 		return true;
 	}

@@ -69,6 +69,13 @@ export const PlayerSettings = {
 	} satisfies Setting<boolean>
 };
 
+export const SeriesSettings = {
+	NextEpisodeAirDate: {
+		key: 'nextEpisodeAirDate',
+		default: true
+	} satisfies Setting<boolean>
+};
+
 export const DebugSettings = {
 	AlwaysShowPlayerControls: {
 		key: 'alwaysShowPlayerControls',

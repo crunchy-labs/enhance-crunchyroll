@@ -23,11 +23,30 @@ export function parseMessage<Req, Res, M extends Message<Req, Res>>(
 	return payload;
 }
 
+// messages must be sent using a long living port. i would like to do it differently but when the popup menu is open,
+// the normal browser.runtime.sendMessage doesn't return the correct results from the background script. i don't know
+// why this is the case, the internet doesn't know it either
+let port: browser.Runtime.Port | null = null;
 export async function sendMessage<Req, Res>(
 	message: Message<Req, Res>,
 	content: Req
 ): Promise<Res> {
-	return await browser.runtime.sendMessage({ ...message, content: content });
+	if (!port) port = browser.runtime.connect();
+
+	let resolve: (value: Res) => void;
+	const promise = new Promise<Res>((r) => (resolve = r));
+
+	const responseListener = (msg: { id: string; content: any }) => {
+		if (msg.id == message.id) resolve(msg.content as unknown as Res);
+	};
+	port.onMessage.addListener(responseListener);
+
+	port.postMessage({ ...message, content: content });
+
+	const response = await promise;
+	port.onMessage.removeListener(responseListener);
+
+	return response;
 }
 
 export const HlsDownload: Message<
@@ -45,4 +64,8 @@ export const HlsDownload: Message<
 
 export const ActiveDownload: Message<ActiveDownloadType, boolean> = {
 	id: 'activeDownload'
+};
+
+export const JsonRequest: Message<{ url: string; init?: RequestInit }, any> = {
+	id: 'jsonRequest'
 };

@@ -11,8 +11,8 @@
 		"serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\" --source-dir ./dist/",
 		"serve:chrome": "web-ext run -t chromium --start-url \"https://example.com\" --source-dir ./dist/",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
+		"lint": "prettier --check --plugin prettier-plugin-svelte . && eslint .",
+		"format": "prettier --write --plugin prettier-plugin-svelte .",
 		"release:firefox": "MANIFEST_VERSION=2 CHROMIUM=false vite build --outDir release/firefox",
 		"release:chrome": "MANIFEST_VERSION=3 CHROMIUM=true vite build --outDir release/chrome"
 	},

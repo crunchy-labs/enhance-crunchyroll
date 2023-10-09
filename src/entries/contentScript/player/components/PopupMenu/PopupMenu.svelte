@@ -136,7 +136,14 @@
 	}
 
 	.popup {
-		font: 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+		font:
+			14px -apple-system,
+			BlinkMacSystemFont,
+			'Segoe UI',
+			Roboto,
+			Helvetica,
+			Arial,
+			sans-serif;
 		line-height: 18px;
 
 		background-color: #141519;

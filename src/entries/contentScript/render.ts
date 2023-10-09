@@ -4,7 +4,7 @@ export async function render(
 	cssPaths: string[],
 	parent: HTMLElement,
 	render: (appRoot: HTMLElement) => void
-) {
+): Promise<HTMLElement> {
 	const appContainer = document.createElement('div');
 	const shadowRoot = appContainer.attachShadow({
 		mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'
@@ -28,4 +28,6 @@ export async function render(
 	parent.appendChild(appContainer);
 
 	render(appRoot);
+
+	return appContainer;
 }

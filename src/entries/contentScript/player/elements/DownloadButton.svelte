@@ -4,8 +4,8 @@
 	import PrimaryButton from '~/entries/contentScript/components/PrimaryButton.svelte';
 	import { Parser as m3u8Parser } from 'm3u8-parser/dist/m3u8-parser';
 	import type { Item } from '~/entries/contentScript/player/components/PopupMenu/popupMenu';
-	import {getJwt} from "~/entries/contentScript/auth";
-	import {id} from "~/entries/contentScript/player/communication";
+	import { getJwt } from '~/entries/contentScript/auth';
+	import { id } from '~/entries/contentScript/player/communication';
 
 	let objectData: {
 		title: string;
