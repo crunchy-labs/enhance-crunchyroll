@@ -1,6 +1,11 @@
 import pkg from '../package.json';
 
 const sharedManifest: Partial<chrome.runtime.ManifestBase> = {
+	browser_specific_settings: {
+		gecko: {
+			id: '{caa4b29e-2b8b-4b80-8654-6300b2aa049f}'
+		}
+	},
 	content_scripts: [
 		{
 			js: ['src/entries/contentScript/player/main.ts'],
