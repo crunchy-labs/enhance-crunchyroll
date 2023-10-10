@@ -5,13 +5,20 @@ export interface Setting<T> {
 	default: T;
 }
 
+async function allSettings(): Promise<{ [key: string]: any }> {
+	return JSON.parse((await browser.storage.local.get('settings'))['settings'] || '{}');
+}
+
 export async function getSetting<T>(setting: Setting<T>): Promise<T> {
-	const res = await browser.storage.local.get(setting.key);
-	return res[setting.key] === undefined ? setting.default : res[setting.key];
+	const settings = await allSettings();
+	return settings[setting.key] === undefined ? setting.default : settings[setting.key];
 }
 
 export async function setSetting<T>(setting: Setting<T>, value: T) {
-	await browser.storage.local.set({ [setting.key]: value });
+	const settings = await allSettings();
+	await browser.storage.local.set({
+		settings: JSON.stringify({ ...settings, [setting.key]: value })
+	});
 }
 
 export function subscribeSetting<T>(
@@ -20,16 +27,21 @@ export function subscribeSetting<T>(
 	initialRead?: boolean
 ): () => void {
 	const subscribeCallback = (changes: { [key: string]: browser.Storage.StorageChange }) => {
-		const subscribed = changes[setting.key];
-		if (subscribed !== undefined) {
-			callback(subscribed.newValue, subscribed.oldValue);
+		const settingsChanges = changes['settings'];
+		if (!settingsChanges) return;
+
+		const oldValue = JSON.parse(settingsChanges.oldValue || '{}')[setting.key];
+		const newValue = JSON.parse(settingsChanges.newValue || '{}')[setting.key];
+
+		if (oldValue !== newValue) {
+			callback(newValue, oldValue);
 		}
 	};
 
 	browser.storage.local.onChanged.addListener(subscribeCallback);
 
 	if (initialRead === true) {
-		browser.storage.local.get(setting.key).then((v) => {
+		allSettings().then((v) => {
 			const value = v[setting.key] === undefined ? setting.default : v[setting.key];
 			callback(value, value);
 		});
@@ -44,10 +56,15 @@ export function subscribeSettings(
 	initialRead?: boolean
 ): () => void {
 	const subscribeCallback = (changes: { [key: string]: browser.Storage.StorageChange }) => {
+		const settingsChanges = changes['settings'];
+		if (!settingsChanges) return;
+
 		for (const setting of settings) {
-			const change = changes[setting.key];
-			if (change !== undefined) {
-				callback(setting.key, change.newValue, change.oldValue);
+			const oldValue = JSON.parse(settingsChanges.oldValue || '{}')[setting.key];
+			const newValue = JSON.parse(settingsChanges.newValue || '{}')[setting.key];
+
+			if (oldValue !== newValue) {
+				callback(setting.key, newValue, oldValue);
 			}
 		}
 	};
@@ -55,7 +72,7 @@ export function subscribeSettings(
 	browser.storage.local.onChanged.addListener(subscribeCallback);
 
 	if (initialRead === true) {
-		browser.storage.local.get(settings.map((v) => v.key)).then((v) => {
+		allSettings().then((v) => {
 			for (const setting of settings) {
 				const value = v[setting.key] === undefined ? setting.default : v[setting.key];
 				callback(setting.key, value, value);
@@ -85,7 +102,11 @@ export const SeriesSettings = {
 	NextEpisodeAirDate: {
 		key: 'nextEpisodeAirDate',
 		default: true
-	} satisfies Setting<boolean>
+	} satisfies Setting<boolean>,
+	AnimeListLinks: {
+		key: 'animeListLinks',
+		default: { anilist: false, mal: false }
+	} satisfies Setting<{ anilist: boolean; mal: boolean }>
 };
 
 export const DebugSettings = {

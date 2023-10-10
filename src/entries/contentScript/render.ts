@@ -11,6 +11,7 @@ export async function render(
 		mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'
 	});
 	const appRoot = document.createElement('div');
+	appRoot.style.display = 'unset';
 
 	if (import.meta.hot) {
 		const { addViteStyleTarget } = await import('@samrum/vite-plugin-web-extension/client');
@@ -36,9 +37,15 @@ export async function render(
 export class MountComponent {
 	static elems: Map<string, HTMLElement> = new Map();
 
-	static mount(component: typeof SvelteComponent, cssPaths: string[], target: HTMLElement) {
+	static mount(
+		component: typeof SvelteComponent,
+		cssPaths: string[],
+		target: HTMLElement,
+		props?: Record<string, any>
+	) {
 		render(cssPaths, target, (app) => {
 			new component({
+				props: props,
 				target: app
 			});
 		}).then((e) => this.elems.set(component.name, e));

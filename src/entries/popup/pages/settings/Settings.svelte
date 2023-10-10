@@ -22,7 +22,17 @@
 		return store;
 	}
 
-	let sections = [];
+	let sections: {
+		name: string;
+		open: boolean;
+		entries: {
+			name: string;
+			details: string;
+			setting: Setting<any>;
+			value: any;
+			values?: { name: string; key: string }[];
+		}[];
+	}[] = [];
 	(async () => {
 		sections = [
 			{
@@ -58,6 +68,16 @@
 						details: 'Show the date when the next episode of a series airs',
 						setting: SeriesSettings.NextEpisodeAirDate,
 						value: await settingStoreProxy(SeriesSettings.NextEpisodeAirDate)
+					},
+					{
+						name: 'External anime list links',
+						details: 'Show links to external anime list/tracking websites',
+						setting: SeriesSettings.AnimeListLinks,
+						value: await settingStoreProxy(SeriesSettings.AnimeListLinks),
+						values: [
+							{ name: 'AniList', key: 'anilist' },
+							{ name: 'MyAnimeList', key: 'mal' }
+						]
 					}
 				]
 			},
@@ -81,13 +101,9 @@
 	{#each sections as section}
 		<div>
 			<Section title={section.name} open={section.open}>
-				<table style="width: 100%">
-					<colgroup>
-						<col style="width: 75%" />
-						<col style="width: 25%" />
-					</colgroup>
+				<table>
 					{#each section.entries as entry}
-						<tr>
+						<tr class:subtable-label={!(typeof entry.setting.default === 'boolean')}>
 							<td>
 								<label for={entry.setting.key} title={entry.details}>{entry.name}</label>
 							</td>
@@ -102,6 +118,28 @@
 								{/if}
 							</td>
 						</tr>
+						{#if typeof entry.setting.default === 'object'}
+							<tr class="subtable">
+								<table>
+									{#each entry.values || [] as value}
+										<tr>
+											<td>
+												<label for={`${entry.setting.key}-${value.key}`}>{value.name}</label>
+											</td>
+											<td>
+												<input
+													id={`${entry.setting.key}-${value.key}`}
+													type="checkbox"
+													checked={get(entry.value)[value.key]}
+													on:change={(e) =>
+														entry.value.set({ ...get(entry.value), [value.key]: e.target.checked })}
+												/>
+											</td>
+										</tr>
+									{/each}
+								</table>
+							</tr>
+						{/if}
 					{/each}
 				</table>
 			</Section>
@@ -118,17 +156,35 @@
 
 	table {
 		border-spacing: 0 0.5rem;
+		table-layout: fixed;
+		width: 100%;
 
 		tr {
 			transition: color 0.2s ease;
 
-			&:hover {
-				color: #2abdbb;
+			&:not(.subtable):not(.subtable-label) {
+				&:hover {
+					color: #2abdbb;
+				}
+
+				& td > * {
+					display: block;
+				}
 			}
 		}
 
-		td > * {
-			display: block;
+		td {
+			&:nth-child(1) {
+				width: 75%;
+			}
+			&:nth-child(2) {
+				width: 25%;
+			}
 		}
+	}
+
+	.subtable {
+		display: block;
+		margin: -0.675rem 0 0 2rem;
 	}
 </style>

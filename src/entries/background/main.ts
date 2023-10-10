@@ -68,7 +68,7 @@ browser.runtime.onConnect.addListener((port) => {
 					return await response.json();
 				}
 			}
-		})().then((r) => port.postMessage({ id: parsed.id, content: r }));
+		})().then((r) => port.postMessage({ id: parsed.id, uuid: parsed.uuid, content: r }));
 	});
 });
 

@@ -10,6 +10,7 @@ export type MessageReqType<Type> = Type extends Message<infer Req, any> ? Req : 
 export type MessageResType<Type> = Type extends Message<any, infer Res> ? Res : never;
 
 export type MessageRequest<M extends Message<any, any>> = M & {
+	uuid: string;
 	content: MessageReqType<M>;
 };
 
@@ -33,15 +34,17 @@ export async function sendMessage<Req, Res>(
 ): Promise<Res> {
 	if (!port) port = browser.runtime.connect();
 
+	const messageUuid = crypto.randomUUID();
+
 	let resolve: (value: Res) => void;
 	const promise = new Promise<Res>((r) => (resolve = r));
 
-	const responseListener = (msg: { id: string; content: any }) => {
-		if (msg.id == message.id) resolve(msg.content as unknown as Res);
+	const responseListener = (msg: { id: string; uuid: string; content: any }) => {
+		if (msg.id == message.id && msg.uuid == messageUuid) resolve(msg.content as unknown as Res);
 	};
 	port.onMessage.addListener(responseListener);
 
-	port.postMessage({ ...message, content: content });
+	port.postMessage({ ...message, uuid: messageUuid, content: content });
 
 	const response = await promise;
 	port.onMessage.removeListener(responseListener);

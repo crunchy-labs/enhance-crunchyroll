@@ -1,33 +1,24 @@
 <script lang="ts">
-	import { JsonRequest, sendMessage } from '~/lib/messages';
+	import { anilistApiRequest } from '~/entries/contentScript/api';
 
 	let airingDate: Date | null = null;
 
 	(async () => {
 		const nextAiringEpisodeQuery = `
-      query {
-        Media(search: "${
-					document.location.pathname.split('/').slice(-1)[0]
-				}", type: ANIME, status: RELEASING) {
-          nextAiringEpisode {
-            airingAt
-          }
-        }
-      }
-      `;
-
-		const json: { data: { Media: { nextAiringEpisode: { airingAt: number } | null } } } =
-			await sendMessage(JsonRequest, {
-				url: 'https://graphql.anilist.co',
-				init: {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ query: nextAiringEpisodeQuery })
+		query {
+			Media(search: "${
+				document.location.pathname.split('/').slice(-1)[0]
+			}", type: ANIME, status: RELEASING) {
+				nextAiringEpisode {
+				airingAt
 				}
-			});
-		if (json.data.Media.nextAiringEpisode?.airingAt) {
+			}
+		}
+		`;
+
+		const json: { data: { Media?: { nextAiringEpisode: { airingAt: number } | null } } } =
+			await anilistApiRequest(nextAiringEpisodeQuery);
+		if (json.data.Media?.nextAiringEpisode?.airingAt) {
 			airingDate = new Date(json.data.Media.nextAiringEpisode.airingAt * 1000);
 		}
 	})();
