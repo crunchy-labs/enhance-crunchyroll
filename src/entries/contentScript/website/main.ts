@@ -1,6 +1,8 @@
 import { main as seriesMain } from '~/entries/contentScript/website/series/main';
 
-const pairs = [{ entry: seriesMain, pattern: /^https:\/\/www\.crunchyroll\.com\/series\/.*$/ }];
+const pairs = [
+	{ entry: seriesMain, pattern: /^https:\/\/www\.crunchyroll\.com(\/\w+)?\/series\/.*$/ }
+];
 
 function checkLocation() {
 	for (const { entry, pattern } of pairs) {
