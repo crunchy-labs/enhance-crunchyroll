@@ -25,10 +25,13 @@ A multi-browser extension to enhance your [Crunchyroll](https://www.crunchyroll.
 
 ## ✨ Features
 
-- Download videos[^1][^2].
+- Download videos[^1][^2]
+- Show the air date of the next episode (if available)
+- Add links to the [AniList](https://anilist.co/) and [MyAnimeList](https://myanimelist.net/) entries of an anime (season)
 - Video player improvements
-  - No parallel stream limit.
-  - Default context menu when right-clicking the player.
+  - No parallel stream limit
+  - Maximize player on double-click
+  - Default context menu when right-clicking the player
 
 [^1]: Due to browser restrictions the download is only available as [`.ts`](https://en.wikipedia.org/wiki/MPEG_transport_stream) file.
 [^2]: On Firefox, the episode will be completely loaded into RAM before writing it to the disk which might cause some lagging. This is due to the lack of the (non-standardized) [`showSaveFilePicker`](https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker) method.
