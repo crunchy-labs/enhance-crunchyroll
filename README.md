@@ -12,6 +12,9 @@ A multi-browser extension to enhance your [Crunchyroll](https://www.crunchyroll.
   <a href="https://addons.mozilla.org/firefox/addon/enhance-crunchyroll/">
     <img src="https://img.shields.io/amo/users/enhance-crunchyroll?style=flat-square&label=firefox%20users" alt="Firefox Users">
   </a>
+  <a href="https://chrome.google.com/webstore/detail/enhance-crunchyroll/jchhpgcchmhdljkoennoagkhjomflicl">
+    <img src="https://img.shields.io/chrome-web-store/users/jchhpgcchmhdljkoennoagkhjomflicl?style=flat-square&label=chrome%20users" alt="Chrome Users">
+  </a>
   <a href="https://github.com/crunchy-labs/enhance-crunchyroll/actions/workflows/ci.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/crunchy-labs/enhance-crunchyroll/ci.yml?branch=master&style=flat-square" alt="CI">
   </a>
@@ -36,7 +39,8 @@ A multi-browser extension to enhance your [Crunchyroll](https://www.crunchyroll.
 
 The best way to install the extension are the official browser extension stores:
 
-- [Firefox](https://addons.mozilla.org/firefox/addon/enhance-crunchyroll/)
+- [Firefox Addon Store](https://addons.mozilla.org/firefox/addon/enhance-crunchyroll/)
+- [Chrome Web Store](https://chrome.google.com/webstore/detail/enhance-crunchyroll/jchhpgcchmhdljkoennoagkhjomflicl)
 
 ### Manual installation
 
