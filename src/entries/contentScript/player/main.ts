@@ -7,9 +7,18 @@ export let id = '';
 
 let observer: MutationObserver;
 async function onMessage(message: MessageEvent) {
-	const data: { value?: { media?: { metadata: { id: string } } } } = JSON.parse(message.data);
+	const data: {
+		method: string;
+		value?: {
+			media?: {
+				metadata: {
+					id: string;
+				};
+			};
+		};
+	} = JSON.parse(message.data);
 
-	if (data.value?.media?.metadata.id == undefined) return;
+	if (data.method != 'extendConfig' || id === data.value?.media?.metadata.id) return;
 	id = data.value.media.metadata.id;
 
 	if (observer) {
@@ -33,6 +42,7 @@ async function onMessage(message: MessageEvent) {
 		MountComponent.mount(DownloadButton, import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, videoControls);
 	});
 
+	console.log(controlsContainer);
 	observer.observe(controlsContainer, {
 		childList: true
 	});
