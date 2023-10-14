@@ -17,3 +17,7 @@ export async function waitForCallback<V, T, C extends (value: V) => T | undefine
 
 	return promise;
 }
+
+export async function sleep(ms: number): Promise<void> {
+	return new Promise((r) => setTimeout(r, ms));
+}

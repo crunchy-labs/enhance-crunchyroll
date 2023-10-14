@@ -2,6 +2,7 @@ import { getElementMounted } from '~/entries/contentScript/player/utils';
 import { MountComponent } from '~/entries/contentScript/render';
 import DownloadButton from '~/entries/contentScript/player/elements/DownloadButton.svelte';
 import { settings } from '~/entries/contentScript/player/settings';
+import { sleep } from '~/lib/utils';
 
 export let id = '';
 
@@ -26,6 +27,9 @@ async function onMessage(message: MessageEvent) {
 	}
 
 	const player = document.getElementById('vilos') as HTMLDivElement;
+	// sleep a bit to give the player time to render the new controls container when accessing the
+	// player via client site routing
+	await sleep(100);
 	const controlsContainer = await getElementMounted(
 		(p) => p.querySelector('#vilosControlsContainer'),
 		player,
