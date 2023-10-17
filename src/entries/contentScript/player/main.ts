@@ -45,8 +45,6 @@ async function onMessage(message: MessageEvent) {
 
 		MountComponent.mount(DownloadButton, import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, videoControls);
 	});
-
-	console.log(controlsContainer);
 	observer.observe(controlsContainer, {
 		childList: true
 	});
