@@ -103,6 +103,10 @@ export const SeriesSettings = {
 		key: 'nextEpisodeAirDate',
 		default: true
 	} satisfies Setting<boolean>,
+	RelativeEpisodeNumber: {
+		key: 'relativeEpisodeNumber',
+		default: false
+	} satisfies Setting<boolean>,
 	AnimeListLinks: {
 		key: 'animeListLinks',
 		default: { anilist: false, mal: false }

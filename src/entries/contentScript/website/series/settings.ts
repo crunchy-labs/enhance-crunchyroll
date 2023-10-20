@@ -12,6 +12,13 @@ const DomElements = {
 			true
 		);
 	},
+	seasonWithNavigationContainer: async (): Promise<HTMLDivElement> => {
+		return await getElementMounted(
+			(p) => p.querySelector('.erc-season-with-navigation'),
+			document.getElementById('content'),
+			true
+		);
+	},
 	seasonSelectContainer: async (): Promise<HTMLDivElement> => {
 		return await getElementMounted(
 			(p) => p.querySelector('.seasons-select'),
@@ -31,6 +38,72 @@ async function nextEpisodeAirDateSetting(enable: boolean) {
 	const container = document.createElement('div');
 	seriesRatingContainer.parentElement.insertBefore(container, seriesRatingContainer.nextSibling);
 	MountComponent.mount(NextEpisodeAirDate, import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, container);
+}
+
+const relativeEpisodeNumbersEpisodeNumberRegex = /(E\d+)(?=\.|$)/;
+let relativeEpisodeNumbersPairs = [];
+let relativeEpisodeNumbersEpisodeListObserver: MutationObserver;
+async function relativeEpisodeNumbersSetting(enable: boolean) {
+	if (relativeEpisodeNumbersEpisodeListObserver)
+		relativeEpisodeNumbersEpisodeListObserver.disconnect();
+
+	if (!enable) {
+		if (!relativeEpisodeNumbersPairs) return;
+
+		for (const [card, relativeIdentifier, identifier] of relativeEpisodeNumbersPairs) {
+			console.log(relativeIdentifier, identifier);
+			card.innerHTML = card.innerHTML.replace(new RegExp(relativeIdentifier, 'gm'), identifier);
+		}
+
+		return;
+	}
+	relativeEpisodeNumbersPairs = [];
+
+	let selfModify = false;
+	const mountFunction = () => {
+		const cards = document.querySelectorAll('.episode-list .card') as NodeListOf<HTMLDivElement>;
+
+		let skipped = 0;
+		for (const [i, card] of cards.entries()) {
+			let identifier = card.querySelector('h4 a').textContent;
+			identifier = identifier.split('-')[0].trim();
+
+			const episodeNumber = relativeEpisodeNumbersEpisodeNumberRegex.exec(identifier);
+			if (episodeNumber === null) {
+				skipped++;
+				continue;
+			} else if (identifier.indexOf('.') != -1 || episodeNumber[0] == '0') {
+				skipped++;
+			}
+
+			const relativeIdentifier = identifier.replace(
+				relativeEpisodeNumbersEpisodeNumberRegex,
+				`E${i + 1 - skipped}`
+			);
+			if (relativeIdentifier === identifier) continue;
+
+			selfModify = true;
+			relativeEpisodeNumbersPairs.push([card, relativeIdentifier, identifier]);
+			card.innerHTML = card.innerHTML.replace(new RegExp(identifier, 'gm'), relativeIdentifier);
+		}
+	};
+
+	const seasonWithNavigationContainer = await DomElements.seasonWithNavigationContainer();
+	relativeEpisodeNumbersEpisodeListObserver = new MutationObserver(() => {
+		// make sure that `mountFunction` is not re-triggered when the html is edited from inside it
+		if (selfModify) {
+			selfModify = false;
+			return;
+		}
+
+		mountFunction();
+	});
+	relativeEpisodeNumbersEpisodeListObserver.observe(seasonWithNavigationContainer, {
+		childList: true,
+		subtree: true
+	});
+
+	mountFunction();
 }
 
 let animeListLinkSeasonNameObserver: MutationObserver;
@@ -81,13 +154,20 @@ async function animeListLinkSetting(value: { anilist: boolean; mal: boolean }) {
 }
 
 export async function settings() {
-	const subscriptionSettings = [SeriesSettings.NextEpisodeAirDate, SeriesSettings.AnimeListLinks];
+	const subscriptionSettings = [
+		SeriesSettings.NextEpisodeAirDate,
+		SeriesSettings.RelativeEpisodeNumber,
+		SeriesSettings.AnimeListLinks
+	];
 	subscribeSettings(
 		subscriptionSettings,
 		(key, value) => {
 			switch (key) {
 				case SeriesSettings.NextEpisodeAirDate.key:
 					nextEpisodeAirDateSetting(value);
+					break;
+				case SeriesSettings.RelativeEpisodeNumber.key:
+					relativeEpisodeNumbersSetting(value);
 					break;
 				case SeriesSettings.AnimeListLinks.key:
 					animeListLinkSetting(value);

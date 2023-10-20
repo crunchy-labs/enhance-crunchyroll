@@ -70,6 +70,12 @@
 						value: await settingStoreProxy(SeriesSettings.NextEpisodeAirDate)
 					},
 					{
+						name: 'Relative episode numbers',
+						details: 'Show episode numbers relative to the season',
+						setting: SeriesSettings.RelativeEpisodeNumber,
+						value: await settingStoreProxy(SeriesSettings.RelativeEpisodeNumber)
+					},
+					{
 						name: 'External anime list links',
 						details: 'Show links to external anime list/tracking websites',
 						setting: SeriesSettings.AnimeListLinks,
