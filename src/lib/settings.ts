@@ -90,7 +90,7 @@ export const PlayerSettings = {
 	} satisfies Setting<boolean>,
 	NoStreamLimit: {
 		key: 'noStreamLimit',
-		default: true
+		default: false
 	} satisfies Setting<boolean>,
 	DefaultContextMenu: {
 		key: 'defaultContextMenu',

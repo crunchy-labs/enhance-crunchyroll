@@ -47,7 +47,8 @@
 					},
 					{
 						name: 'Disable stream limit',
-						details: 'Disable the max. parallel stream limit',
+						details:
+							'Disable the max. parallel stream limit. With this enabled, the player may stop playing the video and show an error more often (a reload of the page fixes this)',
 						setting: PlayerSettings.NoStreamLimit,
 						value: await settingStoreProxy(PlayerSettings.NoStreamLimit)
 					},
