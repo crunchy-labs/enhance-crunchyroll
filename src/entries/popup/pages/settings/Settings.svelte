@@ -48,7 +48,8 @@
 					{
 						name: 'Disable stream limit',
 						details:
-							'Disable the max. parallel stream limit. With this enabled, the player may stop playing the video and show an error more often (a reload of the page fixes this)',
+							'Disable the max. parallel stream limit. With this enabled, the player may stop playing the video and ' +
+							'show an error more often (a reload of the page fixes this)',
 						setting: PlayerSettings.NoStreamLimit,
 						value: await settingStoreProxy(PlayerSettings.NoStreamLimit)
 					},
@@ -93,8 +94,8 @@
 				open: false,
 				entries: [
 					{
-						name: 'Show console download progress',
-						details: 'Show the video download progress in the console',
+						name: 'Show debug console download progress',
+						details: 'Show the video download progress in the extension debug console',
 						setting: DebugSettings.ShowConsoleDownloadProgress,
 						value: await settingStoreProxy(DebugSettings.ShowConsoleDownloadProgress)
 					}
