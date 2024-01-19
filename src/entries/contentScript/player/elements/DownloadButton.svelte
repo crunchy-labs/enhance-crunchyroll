@@ -7,6 +7,9 @@
 	import { getJwt } from '~/entries/contentScript/auth';
 	import { id } from '~/entries/contentScript/player/main';
 
+	let indexData: {
+		cms_web: { bucket: string; signature: string; policy: string; key_pair_id: string };
+	};
 	let objectData: {
 		title: string;
 		images: { thumbnail: { source: string }[][] };
@@ -43,6 +46,14 @@
 		if (objectData == null || streamData == null) {
 			const jwt = await getJwt();
 
+			if (indexData == null) {
+				const indexRes = await fetch('https://www.crunchyroll.com/index/v2', {
+					headers: {
+						Authorization: `Bearer ${jwt}`
+					}
+				});
+				indexData = await indexRes.json();
+			}
 			if (objectData == null) {
 				const objectRes = await fetch(`https://www.crunchyroll.com/content/v2/cms/objects/${id}`, {
 					headers: {
@@ -52,15 +63,25 @@
 				objectData = (await objectRes.json()).data[0];
 			}
 			if (streamData == null) {
-				const streamRes = await fetch(`https://www.crunchyroll.com${objectData.streams_link}`, {
-					headers: {
-						Authorization: `Bearer ${jwt}`
-					}
+				const bucket = indexData.cms_web.bucket;
+				const stream_id = /\/(\w+)\/streams/.exec(objectData.streams_link)[1];
+				const query = new URLSearchParams({
+					Signature: indexData.cms_web.signature,
+					Policy: indexData.cms_web.policy,
+					'Key-Pair-Id': indexData.cms_web.key_pair_id
 				});
-				const streamJson: { data: [{ adaptive_hls: { '': { url: string } } }] } =
+				const streamRes = await fetch(
+					`https://www.crunchyroll.com/cms/v2${bucket}/videos/${stream_id}/streams?${query}`,
+					{
+						headers: {
+							Authorization: `Bearer ${jwt}`
+						}
+					}
+				);
+				const streamJson: { streams: { adaptive_hls: { '': { url: string } } } } =
 					await streamRes.json();
 
-				const m3u8MasterRes = await fetch(streamJson.data[0].adaptive_hls[''].url);
+				const m3u8MasterRes = await fetch(streamJson.streams.adaptive_hls[''].url);
 				const m3u8MasterData = await m3u8MasterRes.text();
 
 				const m3u8MasterParser = new m3u8Parser();
