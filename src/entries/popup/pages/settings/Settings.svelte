@@ -6,7 +6,8 @@
 		getSetting,
 		setSetting,
 		PlayerSettings,
-		SeriesSettings
+		SeriesSettings,
+		WatchSettings
 	} from '~/lib/settings';
 	import type { Writable } from 'svelte/store';
 	import { get, writable } from 'svelte/store';
@@ -82,6 +83,22 @@
 						details: 'Show links to external anime list/tracking websites',
 						setting: SeriesSettings.AnimeListLinks,
 						value: await settingStoreProxy(SeriesSettings.AnimeListLinks),
+						values: [
+							{ name: 'AniList', key: 'anilist' },
+							{ name: 'MyAnimeList', key: 'mal' }
+						]
+					}
+				]
+			},
+			{
+				name: 'Watch',
+				open: true,
+				entries: [
+					{
+						name: 'External anime list links',
+						details: 'Show links to external anime list/tracking websites',
+						setting: WatchSettings.AnimeListLinks,
+						value: await settingStoreProxy(WatchSettings.AnimeListLinks),
 						values: [
 							{ name: 'AniList', key: 'anilist' },
 							{ name: 'MyAnimeList', key: 'mal' }

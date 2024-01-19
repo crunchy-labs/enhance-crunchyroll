@@ -1,7 +1,9 @@
 import { main as seriesMain } from '~/entries/contentScript/website/series/main';
+import { main as watchMain } from '~/entries/contentScript/website/watch/main';
 
 const pairs = [
-	{ entry: seriesMain, pattern: /^https:\/\/www\.crunchyroll\.com(\/\w+)?\/series\/.*$/ }
+	{ entry: seriesMain, pattern: /^https:\/\/www\.crunchyroll\.com(\/\w+)?\/series\/.*$/ },
+	{ entry: watchMain, pattern: /^https:\/\/www\.crunchyroll\.com(\/\w+)?\/watch\/.*$/ }
 ];
 
 function checkLocation() {

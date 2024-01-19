@@ -113,6 +113,13 @@ export const SeriesSettings = {
 	} satisfies Setting<{ anilist: boolean; mal: boolean }>
 };
 
+export const WatchSettings = {
+	AnimeListLinks: {
+		key: 'animeListLinks',
+		default: { anilist: false, mal: false }
+	} satisfies Setting<{ anilist: boolean; mal: boolean }>
+};
+
 export const DebugSettings = {
 	AlwaysShowPlayerControls: {
 		key: 'alwaysShowPlayerControls',
