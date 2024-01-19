@@ -85,48 +85,48 @@ export function subscribeSettings(
 
 export const PlayerSettings = {
 	DoubleClickMaximize: {
-		key: 'doubleClickMaximize',
+		key: 'player.doubleClickMaximize',
 		default: true
 	} satisfies Setting<boolean>,
 	NoStreamLimit: {
-		key: 'noStreamLimit',
+		key: 'player.noStreamLimit',
 		default: false
 	} satisfies Setting<boolean>,
 	DefaultContextMenu: {
-		key: 'defaultContextMenu',
+		key: 'player.defaultContextMenu',
 		default: true
 	} satisfies Setting<boolean>
 };
 
 export const SeriesSettings = {
 	NextEpisodeAirDate: {
-		key: 'nextEpisodeAirDate',
+		key: 'series.nextEpisodeAirDate',
 		default: true
 	} satisfies Setting<boolean>,
 	RelativeEpisodeNumber: {
-		key: 'relativeEpisodeNumber',
+		key: 'series.relativeEpisodeNumber',
 		default: false
 	} satisfies Setting<boolean>,
 	AnimeListLinks: {
-		key: 'animeListLinks',
+		key: 'series.animeListLinks',
 		default: { anilist: false, mal: false }
 	} satisfies Setting<{ anilist: boolean; mal: boolean }>
 };
 
 export const WatchSettings = {
 	AnimeListLinks: {
-		key: 'animeListLinks',
+		key: 'watch.animeListLinks',
 		default: { anilist: false, mal: false }
 	} satisfies Setting<{ anilist: boolean; mal: boolean }>
 };
 
 export const DebugSettings = {
 	AlwaysShowPlayerControls: {
-		key: 'alwaysShowPlayerControls',
+		key: 'debug.alwaysShowPlayerControls',
 		default: false
 	} satisfies Setting<boolean>,
 	ShowConsoleDownloadProgress: {
-		key: 'showConsoleDownloadProgress',
+		key: 'debug.showConsoleDownloadProgress',
 		default: true
 	} satisfies Setting<boolean>
 };
