@@ -27,7 +27,7 @@ async function animeListLinkSetting(value: { anilist: boolean; mal: boolean }) {
 
 	if (animeListLinkSeasonNameObserver) animeListLinkSeasonNameObserver.disconnect();
 
-	const episodeActionsContainer = await DomElements.episodeActionsContainer();
+	const episodeActionsContainer = await DomElements.headerContainer();
 	const rightContainer = document.createElement('div');
 	rightContainer.style.display = 'flex';
 	rightContainer.style.alignItems = 'center';

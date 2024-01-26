@@ -61,7 +61,7 @@
 		gap: 0.25rem;
 
 		height: 100%;
-		margin-left: 0.75rem;
+		margin-left: 0.6rem;
 	}
 
 	a {
